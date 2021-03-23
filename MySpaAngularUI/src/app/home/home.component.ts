@@ -3,6 +3,7 @@ import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { AuthService } from '../auth.service';
 import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -14,7 +15,8 @@ export class HomeComponent implements OnInit {
   isAuthenticated$: Observable<boolean>;
   constructor(
     private authservice: AuthService,
-    private httpClient: HttpClient
+    private httpClient: HttpClient,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -37,5 +39,13 @@ export class HomeComponent implements OnInit {
 
   logout() {
     this.authservice.signOut();
+  }
+
+  openProtectTab(){
+    const url = this.router.serializeUrl(
+      this.router.createUrlTree(['/protected'])
+    );
+
+    window.open(url, '_blank');
   }
 }

@@ -7,15 +7,17 @@ import { HomeComponent } from './home/home.component';
 import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './auth.interceptor';
+import { ProtectedComponent } from './protect/protected.component';
+import { AuthLoginGuard } from './auth-login.guard';
 
 export function configureAuth(oidcConfigService: OidcConfigService) {
   return () =>
     oidcConfigService.withConfig({
-            stsServer: 'https://login.microsoftonline.com/7ff95b15-dc21-4ba6-bc92-824856578fc1/v2.0',
-            authWellknownEndpoint: 'https://login.microsoftonline.com/7ff95b15-dc21-4ba6-bc92-824856578fc1/v2.0',
+            stsServer: 'https://login.microsoftonline.com/3f89ee74-xxxxxxxxxxxxxxxxxxxx/v2.0',
+            authWellknownEndpoint: 'https://login.microsoftonline.com/3f89ee74-xxxxxxxxxxxxxxxx/v2.0',
             redirectUrl: window.location.origin,
-            clientId: 'ad6b0351-92b4-4ee9-ac8d-3e76e5fd1c67',
-            scope: 'openid profile offline_access email api://98328d53-55ec-4f14-8407-0ca5ff2f2d20/access_as_user',
+            clientId: 'xxxxxxxxxxxxxxxxx',
+            scope: 'openid profile offline_access email api://xxxxxxxxxxxxxxxxxx/webapi',
             responseType: 'code',
             silentRenew: true,
             useRefreshToken: true,
@@ -31,12 +33,13 @@ export function configureAuth(oidcConfigService: OidcConfigService) {
 }
 
 @NgModule({
-  declarations: [AppComponent, HomeComponent, UnauthorizedComponent],
+  declarations: [AppComponent, HomeComponent, UnauthorizedComponent, ProtectedComponent],
   imports: [
     BrowserModule,
     RouterModule.forRoot([
     { path: '', redirectTo: 'home', pathMatch: 'full' },
     { path: 'home', component: HomeComponent },
+    { path: 'protected', component: ProtectedComponent, canActivate: [AuthLoginGuard]},
     { path: 'unauthorized', component: UnauthorizedComponent },
 ], { relativeLinkResolution: 'legacy' }),
     AuthModule.forRoot(),
